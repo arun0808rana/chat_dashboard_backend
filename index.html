@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Private Messaging Example</title>
+    <script src="https://cdn.socket.io/4.6.0/socket.io.min.js"
+        integrity="sha384-c79GN5VsunZvi+Q/WObgk2in0CbZsHnjEqvFxC5DxHn9lTfNce2WW6h2pH6u/kF+"
+        crossorigin="anonymous"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.1/socket.io.min.js"></script> -->
+</head>
+
+<body>
+    <h1>Private Messaging Example</h1>
+    <label for="username">Username:</label>
+    <input type="text" id="username">
+    <br><br>
+    <label for="to">To:</label>
+    <input type="text" id="to">
+    <br><br>
+    <label for="message">Message:</label>
+    <input type="text" id="message">
+    <br><br>
+    <button id="join">join</button>
+    <hr>
+    <button id="send">Send</button>
+    <hr>
+    <div id="messages"></div>
+    <script>
+        const socket = io();
+
+        document.getElementById('join').addEventListener('click', () => {
+            const username = document.getElementById('username').value;
+            socket.emit('join', {
+                from: username,
+            });
+
+            // document.getElementById('message').value = '';
+        });
+
+
+        document.getElementById('send').addEventListener('click', () => {
+            const username = document.getElementById('username').value;
+            const to = document.getElementById('to').value;
+            const message = document.getElementById('message').value;
+
+            socket.emit('private message', {
+                from: username,
+                to: to,
+                message: message
+            });
+
+            // document.getElementById('message').value = '';
+        });
+
+        socket.on('private message', (data) => {
+            console.log('data :>> ', data);
+            const messages = document.getElementById('messages');
+            const message = document.createElement('div');
+            message.innerHTML = `<strong>${data.from} to ${data.to}:</strong> ${data.message}`;
+            messages.appendChild(message);
+        });
+    </script>
+</body>
+
+</html>
