@@ -34,7 +34,7 @@ async function addUser(user) {
 async function addMessages(senderUsername, recipientUsername, message) {
     const Sender = await findUserByUsername(senderUsername);
     const Recipient = await findUserByUsername(recipientUsername);
-    console.log('Sender', Sender)
+    // console.log('Sender', Sender)
 
     if (Sender && Recipient) {
         pool.query(`INSERT INTO messages (sender_id, recipient_id, content) VALUES ($1, $2, $3)`, [Sender.id, Recipient.id, message], (err, res) => {
@@ -47,7 +47,13 @@ async function addMessages(senderUsername, recipientUsername, message) {
             }
         });
     } else {
-        console.error('Couldnt find sender or recipient');
+        if(!Sender){
+
+            console.error('Couldnt find sender');
+        }
+        if(!Recipient){
+            console.error('Couldnt find recipient');
+        }
     }
 }
 

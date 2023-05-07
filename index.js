@@ -71,7 +71,7 @@ io.on("connection", function (socket) {
     });
 
     socket.on("private message", (data) => {
-        console.log('first', data.from, data.to, data.message)
+        console.log('MSG: ', data.message, 'From: ', data.from, 'To: ', data.to);
         addMessages(data.from, data.to, data.message);
         // console.log(users, "lol");
         const to = data.to;
